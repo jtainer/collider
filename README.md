@@ -2,4 +2,4 @@ This is my implementation of oriented bounding box collision detection and resol
 
 I may or may not continue to develop this, depending on if I decide to use it in a game.
 
-Requires github.com/raysan5/raylib/tree/master/src/raymath.h for the linear algebra functions.
+Requires github.com/raysan5/raylib/tree/master/src/raymath.h for the linear algebra types and functions.
