@@ -79,6 +79,30 @@ Matrix GetColliderTransform(Collider* col) {
 //		COLLISION DETECTION STUFF BEGINS HERE
 //*******************************************************************
 
+// Point-box collision
+bool TestColliderPoint(Collider* col, Vector3 point) {
+	// Find the bounds of the collider in its local space
+	Vector3 min = col->vertLocal[0];
+	Vector3 max = col->vertLocal[0];
+	for (int i = 1; i < COLLIDER_VERTEX_COUNT; i++) {
+		Vector3 cur = col->vertLocal[i];
+		min.x = fmin(min.x, cur.x);
+		min.y = fmin(min.y, cur.y);
+		min.z = fmin(min.z, cur.z);
+		max.x = fmax(max.x, cur.x);
+		max.y = fmax(max.y, cur.y);
+		max.z = fmax(max.z, cur.z);
+	}
+	
+	// Transform point into local space of collider
+	Matrix invTransform = MatrixInvert(GetColliderTransform(col));
+	point = Vector3Transform(point, invTransform);
+
+	return point.x < max.x && point.x > min.x
+		&& point.y < max.y && point.x > min.y
+		&& point.z < max.z && point.z > min.z;
+}
+
 // First check along each face normal
 // Then check along the cross products of the pairs of the face normals
 //
@@ -109,7 +133,7 @@ static void GetCollisionVectors(Collider* a, Collider* b, Vector3* vec) {
 
 // Iterate through all verts, project on test vector, find min and max values
 // Returns min and max in x and y members, respectively
-Vector2 GetColliderProjectionBounds(Collider* col, Vector3 vec) {
+static Vector2 GetColliderProjectionBounds(Collider* col, Vector3 vec) {
 	Vector2 bounds = { 0 };
 	float proj = Vector3DotProduct(col->vertGlobal[0], vec);
 	bounds.x = bounds.y = proj;

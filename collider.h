@@ -43,6 +43,9 @@ void AddColliderTranslation(Collider* col, Vector3 pos);
 
 Matrix GetColliderTransform(Collider* col);
 
+// Test if a point in global space is inside a collider
+bool TestColliderPoint(Collider* col, Vector3 point);
+
 // Use separating axis theorem to detect overlap
 bool TestColliderPair(Collider* a, Collider* b);
 
